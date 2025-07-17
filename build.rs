@@ -75,7 +75,7 @@ fn build_from_source() {
     };
 
     // CMake
-    let mut cmake = cmake::Config::new("assimp");
+    let mut cmake = cmake::Config::new(env::var("ASSIMP_DIR").unwrap());
     cmake
         .profile("Release")
         .static_crt(true)
@@ -164,6 +164,7 @@ fn link_from_package() {
 fn main() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
     let manifest_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
+	let assimp_dir = PathBuf::from(env::var("ASSIMP_DIR").unwrap());
 
     // Look for assimp lib in Brew install paths on MacOS.
     // See https://stackoverflow.com/questions/70497361/homebrew-mac-m1-cant-find-installs
@@ -182,10 +183,10 @@ fn main() {
     // assimp/defs.h requires config.h to be present, which is generated at build time when building
     // from the source code (which is disabled by default).
     // In this case, place an empty config.h file in the include directory to avoid compilation errors.
-    let config_file = "assimp/include/assimp/config.h";
-    let config_exists = fs::metadata(config_file).is_ok();
+    let config_file = assimp_dir.join("include").join("assimp").join("config.h"); // "assimp/include/assimp/config.h";
+    let config_exists = fs::metadata(&config_file).is_ok();
     if !config_exists {
-        fs::write(config_file, "").expect(
+        fs::write(&config_file, "").expect(
             r#"Unable to write config.h to assimp/include/assimp/,
             make sure you cloned submodules with "git submodule update --init --recursive""#,
         );
@@ -194,7 +195,7 @@ fn main() {
     bindgen::builder()
         .header("wrapper.h")
         .clang_arg(format!("-I{}", out_dir.join(static_lib()).join("include").display()))
-        .clang_arg(format!("-I{}", "assimp/include"))
+        .clang_arg(format!("-I{}", assimp_dir.join("include").display()))
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .allowlist_type("ai.*")
         .allowlist_function("ai.*")

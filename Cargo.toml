@@ -1,7 +1,7 @@
 [package]
-name = "russimp-sys"
-version = "2.0.3"
-authors = ["Jhonny Knaak de Vargas"]
+name = "russimp-sys-patched"
+version = "2.0.3-rc.1"
+authors = ["Jhonny Knaak de Vargas", "jiwonz <me@jiwonz.kr>"]
 edition = "2021"
 license-file = "LICENSE"
 readme = "README.md"
@@ -14,7 +14,7 @@ categories = [
 ]
 keywords = ["assimp", "3d", "blend", "3ds", "glTF"]
 repository = "https://github.com/jkvargas/russimp-sys"
-description = "Raw Assimp bindings for Rust"
+description = "[Fork] Raw Assimp bindings for Rust. patched to use ASSIMP_DIR environment variable instead of assimp submodule."
 include = [
     "/assimp/",
     "/src/",

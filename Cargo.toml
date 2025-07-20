@@ -16,7 +16,6 @@ keywords = ["assimp", "3d", "blend", "3ds", "glTF"]
 repository = "https://github.com/jkvargas/russimp-sys"
 description = "[Fork] Raw Assimp bindings for Rust. patched to use ASSIMP_DIR environment variable instead of assimp submodule."
 include = [
-    "/assimp/",
     "/src/",
     "/bin/",
     "/build.rs",
